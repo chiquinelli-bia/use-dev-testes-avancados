@@ -47,4 +47,33 @@ describe("funções unitárias", () => {
       10,
     );
   });
+  test("deve calcular o preço ao fornecer 200% de desconto", () => {
+    expect(mockCalculateTotalPriceWithDiscount(products, 200)).toBe(0);
+    expect(mockCalculateTotalPriceWithDiscount).toHaveBeenCalledWith(
+      products,
+      200,
+    );
+  });
+  test("deve calcular o preço total ao inserir um desconto negativo", () => {
+    expect(mockCalculateTotalPriceWithDiscount(products, -10)).toBe(100);
+    expect(mockCalculateTotalPriceWithDiscount).toHaveBeenCalledWith(
+      products,
+      -10,
+    );
+  });
+  test("deve calcular o preço total ao inserir desconto 0", () => {
+    expect(mockCalculateTotalPriceWithDiscount(products, 0)).toBe(100);
+    expect(mockCalculateTotalPriceWithDiscount).toHaveBeenCalledWith(
+      products,
+      0,
+    );
+  });
+  test("deve calcular o preço total ao inserir um string abcd como desconto", () => {
+    //@ts-ignore
+    expect(mockCalculateTotalPriceWithDiscount(products, "abc")).toBe(100);
+    expect(mockCalculateTotalPriceWithDiscount).toHaveBeenCalledWith(
+      products,
+      "abc",
+    );
+  });
 });
