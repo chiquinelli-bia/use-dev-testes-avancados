@@ -7,7 +7,12 @@ export const formatPrice = (price: number) => {
 export const calculateTotalPrice = (
   products: { id: number; price: number }[],
 ) => {
-  return products.reduce((acc, product) => acc + product.price, 0);
+  return products.reduce((acc, product) => {
+    const numericPrice = Number(product.price);
+    const validPrice =
+      !isNaN(numericPrice) && numericPrice > 0 ? numericPrice : 0;
+    return acc + validPrice;
+  }, 0);
 };
 
 export const calculateTotalPriceWithDiscount = (
@@ -17,11 +22,12 @@ export const calculateTotalPriceWithDiscount = (
   if (discount >= 100) {
     return 0;
   }
-  if (discount < 0 || typeof discount !== "number") {
-    return calculateTotalPrice(products);
+
+  const basePrice = calculateTotalPrice(products);
+
+  if (discount < 0 || typeof discount !== "number" || isNaN(discount)) {
+    return basePrice;
   }
-  return (
-    products.reduce((acc, product) => acc + product.price, 0) *
-    (1 - discount / 100)
-  );
+
+  return basePrice * (1 - discount / 100);
 };
