@@ -9,20 +9,23 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 describe("./Header.js", () => {
-  test("deveria renderizar o componente corretamente", () => {
-    const { getByTestId } = render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>,
-    );
-    expect(getByTestId("header")).toBeInTheDocument();
-  });
-  test("deve disparar função de navegação ao clicar no logo", () => {
+  beforeEach(() => {
     render(
       <MemoryRouter>
         <Header />
       </MemoryRouter>,
     );
+  });
+  afterEach(() => {
+    mockNavigate.mockClear();
+  });
+  afterAll(() => {
+    mockNavigate.mockReset();
+  });
+  test("deveria renderizar o componente corretamente", () => {
+    expect(screen.getByTestId("header")).toBeInTheDocument();
+  });
+  test("deve disparar função de navegação ao clicar no logo", () => {
     const logo = screen.getByAltText("logo");
     fireEvent.click(logo);
     expect(mockNavigate).toHaveBeenCalledWith("/");
