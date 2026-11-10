@@ -76,4 +76,30 @@ describe("funções unitárias", () => {
       "abc",
     );
   });
+  test("deve retornar 0 quando o carrinho estiver vazio.", () => {
+    expect(mockCalculateTotalPrice([])).toBe(0);
+  });
+  test("deve retornar 0 quando um produto tiver 100% de desconto.", () => {
+    expect(mockCalculateTotalPriceWithDiscount(products, 100)).toBe(0);
+    expect(mockCalculateTotalPriceWithDiscount).toHaveBeenCalledWith(
+      products,
+      100,
+    );
+  });
+  test("deve ignorar produtos com preço negativo", () => {
+    const result = calculateTotalPrice([
+      { id: 1, price: -20 },
+      { id: 2, price: 70 },
+    ]);
+    expect(result).toBe(70);
+  });
+
+  test("deve calcular corretamente se os preços forem strings numéricas", () => {
+    const products = [
+      { id: 1, price: "30" as unknown as number },
+      { id: 2, price: "20" as unknown as number },
+    ];
+    const result = calculateTotalPriceWithDiscount(products, 0);
+    expect(result).toBe(50);
+  });
 });
