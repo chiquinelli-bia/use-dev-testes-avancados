@@ -81,4 +81,33 @@ describe("Cart", () => {
     fireEvent.click(continueShoppingButton);
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
+  test("deve mostrar o item adicionado ao carrinho", async () => {
+    await renderCart();
+    const addItemButton = screen.getByTestId("add-item");
+    await act(async () => {
+      fireEvent.click(addItemButton);
+    });
+
+    expect(screen.getByText("Test Item")).toBeInTheDocument();
+    const incrementButton = screen.getByRole("button", { name: "+" });
+    await act(async () => {
+      fireEvent.click(incrementButton);
+    });
+
+    expect(screen.getByText("2")).toBeInTheDocument();
+
+    const decrementButton = screen.getByRole("button", { name: "-" });
+    await act(async () => {
+      fireEvent.click(decrementButton);
+    });
+
+    expect(screen.getByText("1")).toBeInTheDocument();
+
+    const removeButton = screen.getByAltText("trash");
+    await act(async () => {
+      fireEvent.click(removeButton);
+    });
+
+    expect(screen.queryByText("Test Item")).not.toBeInTheDocument();
+  });
 });
