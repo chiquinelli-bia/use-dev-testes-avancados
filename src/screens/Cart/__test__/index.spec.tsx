@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { ContextProvider, useCart } from "../../../context";
 import { BrowserRouter } from "react-router";
 import { act } from "react";
@@ -65,3 +65,20 @@ const renderCart = async () => {
   });
   return result;
 };
+
+describe("Cart", () => {
+  beforeEach(() => {
+    mockFetch.mockClear();
+    mockNavigate.mockClear();
+    globalThis.fetch = mockFetch as unknown as typeof fetch;
+  });
+
+  test("deve renderizar a mensagem de carrinho vazio caso não tenha itens no carrinho", async () => {
+    await renderCart();
+    expect(screen.getByText("Seu carrinho está vazio")).toBeInTheDocument();
+
+    const continueShoppingButton = screen.getByText("Continuar comprando");
+    fireEvent.click(continueShoppingButton);
+    expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
+});
